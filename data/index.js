@@ -1559,9 +1559,9 @@ const axios = require("axios").default;
 
 console.log(data_source.length);
 (async function () {
-  for (let data of data_source) {
+  for (let i = 0; i <= 20; i++) {
     await axios
-      .post("http://localhost:3001/questions", data)
+      .post("http://localhost:3001/questions", data_source[i])
       .then((data) => console.log("ok"))
       .catch((err) => console.log("error"));
   }
