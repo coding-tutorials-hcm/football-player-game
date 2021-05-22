@@ -1,6 +1,5 @@
 import * as admin from "firebase-admin";
 import * as Joi from "joi";
-import { result, pick, inRange, clone, remove } from "lodash";
 import { Question } from "../models/question.model";
 
 export const validateQuestion = (body) => {
@@ -9,7 +8,7 @@ export const validateQuestion = (body) => {
     image_url: Joi.string(),
     type: Joi.number().required(),
     rank: Joi.number().required(),
-    answer: Joi.object().required(),
+    answer: Joi.any().required(),
   });
 
   const { error, value } = schema.validate(body);
@@ -23,18 +22,21 @@ export const validateQuestion = (body) => {
   };
 };
 
-export const isAlreadyQuestion = (body) => {};
-
 export const getAllQuestionsByRank = async (db, collectionName, rank) => {
   const questionsRef = db.collection(collectionName);
   const snapshot: Array<Question> = await questionsRef
-    .where("rank", "==", rank)
+    .where("rank", "==", Number(rank))
     .get()
     .then((querySnapshot) => {
       const data = [];
-      querySnapshot.forEach((doc) => {
-        data.push(doc.data());
-      });
+      if (querySnapshot.empty) {
+        return [];
+      } else {
+        querySnapshot.docs.forEach((doc) => {
+          data.push(doc.data());
+        });
+      }
+
       return data;
     })
     .then((querySnapshot) => querySnapshot)

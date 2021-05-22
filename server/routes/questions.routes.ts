@@ -18,7 +18,10 @@ class QuestionsRoutes {
     this.routes.patch("/:questionId", questionController.updateQuestionById);
     this.routes.delete("/:questionId", questionController.deleteQuestionById);
 
-    this.routes.get("/test");
+    this.routes.post(
+      "/test-exam",
+      questionController.getTestExamByRankAndCount
+    );
   }
 }
 

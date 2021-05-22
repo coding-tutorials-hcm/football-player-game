@@ -4,6 +4,7 @@ import * as firebaseHelper from "firebase-functions-helper/dist";
 import { Question } from "../models/question.model";
 import { TestExam } from "../models/test-exam.model";
 import {
+  getAllQuestionsByRank,
   getAllQuestionsByTypeAndRank,
   getRandomQuestions,
   validateQuestion,
@@ -239,14 +240,13 @@ export const deleteQuestionById = async (req, res) => {
   }
 };
 
-export const getTestExamByTypeAndRankAndCount = async (req, res) => {
+export const getTestExamByRankAndCount = async (req, res) => {
   const rank: number = req.query.rank;
-  const type: number = req.query.type;
   const count: number = req.query.count;
-  const questions: Array<Question> = await getAllQuestionsByTypeAndRank(
+
+  let questions: Array<Question> = await getAllQuestionsByRank(
     db,
     "questions",
-    type,
     rank
   )
     .then((data) => data)
@@ -259,14 +259,24 @@ export const getTestExamByTypeAndRankAndCount = async (req, res) => {
         .createNewDocument(db, "test-exam", {
           questions: data,
           rank: rank,
-          type: type,
+          count: count,
         } as TestExam)
         .then((doc) => {
           firebaseHelper.firestore
             .updateDocument(db, "test-exam", doc.id, {
               _id: doc.id,
             })
-            .then()
+            .then(async () => {
+              await firebaseHelper.firestore
+                .getDocument(db, "test-exam", doc.id)
+                .then((data) => {
+                  return res.status(200).send({
+                    message: "OK",
+                    data: data,
+                    error: null,
+                  });
+                });
+            })
             .catch((err) =>
               res.status(400).send({
                 error: err,
@@ -274,18 +284,6 @@ export const getTestExamByTypeAndRankAndCount = async (req, res) => {
                 data: null,
               })
             );
-
-          return res.status(200).send({
-            message: "OK",
-            data: {
-              _id: doc.id,
-              questions: data,
-              type: type,
-              rank: rank,
-              count: count,
-            } as TestExam,
-            error: null,
-          });
         })
         .catch((err) =>
           res.status(400).send({
