@@ -25,14 +25,14 @@ export const isUserAlreadyExists = async (db, collectionName, docId) => {
 
 export const validateUser = (body: User) => {
   const schema = Joi.object().keys({
-    _id: Joi.string().required(),
-    displayName: Joi.string().required(),
-    email: Joi.string().email().required(),
-    photoURL: Joi.string().required(),
+    _id: Joi.string(),
+    displayName: Joi.string(),
+    email: Joi.string().email(),
+    photoURL: Joi.string(),
     point: Joi.number().integer().min(0).max(Number.MAX_SAFE_INTEGER),
     rank: Joi.number().integer().min(0).max(Number.MAX_SAFE_INTEGER),
     testExamHistory: Joi.array().min(0).max(5),
-    timeCreate: Joi.string().required(),
+    timeCreate: Joi.string(),
   });
 
   const { error, value } = schema.validate(body);
