@@ -39,12 +39,12 @@ export const createUser = async (req, res) => {
     }
 
     return firebaseHelper.firestore
-      .createNewDocument(db, collectionName, body)
+      .createDocumentWithID(db, collectionName, body._id, body)
       .then((doc) =>
         res.status(201).send({
           message: "Register successfully",
           error: null,
-          data: { user_id: doc.id },
+          data: body._id,
         })
       )
       .catch((err) => {
