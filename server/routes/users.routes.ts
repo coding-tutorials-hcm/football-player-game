@@ -2,6 +2,7 @@ import { Router } from "express";
 
 // Controller
 import * as userController from "../controllers/users.controller";
+import * as firebaseController from "../controllers/login.controller";
 
 class UsersRoutes {
   public routes: Router;
@@ -17,6 +18,7 @@ class UsersRoutes {
     this.routes.post("/", userController.createUser);
     this.routes.patch("/", userController.updateUser);
     this.routes.delete("/:userId", userController.deleteUser);
+    this.routes.post("/login", firebaseController.login);
   }
 }
 

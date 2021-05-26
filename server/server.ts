@@ -1,4 +1,5 @@
 import * as admin from "firebase-admin";
+import * as firebase from "firebase";
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
@@ -7,6 +8,16 @@ import * as cors from "cors";
 import * as serviceAccount from "./serviceAccount.json";
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+});
+
+firebase.default.initializeApp({
+  apiKey: "AIzaSyCQfYm6CcyofLIQ7GXukyG7txAhmttoiz0",
+  authDomain: "football-player-game-880d7.firebaseapp.com",
+  projectId: "football-player-game-880d7",
+  storageBucket: "football-player-game-880d7.appspot.com",
+  messagingSenderId: "791360157679",
+  appId: "1:791360157679:web:9df1c7f91c15b06e06a81a",
+  measurementId: "G-YPTZ3F2EZE",
 });
 
 // Config
