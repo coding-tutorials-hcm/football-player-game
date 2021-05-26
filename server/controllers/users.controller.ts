@@ -56,8 +56,6 @@ export const createUser = async (req, res) => {
         });
       });
   } catch (error) {
-    console.log(error);
-
     res.status(400).send({
       error: error + ", Bad error",
       message: null,
