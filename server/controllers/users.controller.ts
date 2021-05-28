@@ -21,7 +21,7 @@ export const createUser = async (req, res) => {
   try {
     // Check user with email
     if (await isEmailAlreadyExists(db, collectionName, body.email)) {
-      return res.status(400).send({
+      return res.status(200).send({
         message: "This user is already exist",
         error: null,
         data: null,
